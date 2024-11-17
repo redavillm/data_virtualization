@@ -1,6 +1,6 @@
-import { TOTAL_BAR_HEIGHT, TOTAL_BAR_WIDTH } from "../../constants";
-import { IColumn } from "../../interfaces";
-import { calculateHeight } from "../../utilities";
+import { TOTAL_BAR_HEIGHT, TOTAL_BAR_WIDTH } from "../constants";
+import { IColumn } from "../interfaces";
+import { calculateHeight } from "../utilities";
 
 export const Column: React.FC<IColumn> = ({
   title,

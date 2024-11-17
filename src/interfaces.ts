@@ -28,3 +28,9 @@ export interface IColumn {
   barWidth: number;
   maxValue: number;
 }
+export interface INormColumn {
+  title: string;
+  norm: number;
+  maxValue: number;
+  barWidth: number;
+}
