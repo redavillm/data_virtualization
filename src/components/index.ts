@@ -1,3 +1,4 @@
-export * from "./BarChart";
-export * from "./Colum";
-export * from "./NormColumn";
+export * from "./BarChart/BarChart";
+export * from "./Column/Colum";
+export * from "./NormColumn/NormColumn";
+export * from "./Arrow/Arrow";

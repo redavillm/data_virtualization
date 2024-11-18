@@ -1,5 +1,11 @@
-.flex {
+.header_title {
+  text-align: center;
+  color: #898290;
+}
+
+.container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  margin: 40px 50px;
+  margin: 20px auto;
 }

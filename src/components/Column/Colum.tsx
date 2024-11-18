@@ -1,12 +1,15 @@
-import { TOTAL_BAR_HEIGHT, TOTAL_BAR_WIDTH } from "../constants";
-import { IColumn } from "../interfaces";
-import { calculateHeight } from "../utilities";
+import { useEffect } from "react";
+import { IColumnProps } from "../../interfaces";
+import { calculateHeight } from "../../utilities";
+import { COLORS, TOTAL_BAR_HEIGHT, TOTAL_BAR_WIDTH } from "../../constants";
+import { prettyNumber } from "../../utilities/prettyNumber";
 
-export const Column: React.FC<IColumn> = ({
+export const Column: React.FC<IColumnProps> = ({
   title,
   stage: { front, back, db },
   barWidth,
   maxValue,
+  setColHeight,
 }) => {
   const frontHeight = calculateHeight(front, maxValue);
   const backHeight = calculateHeight(back, maxValue);
@@ -14,8 +17,40 @@ export const Column: React.FC<IColumn> = ({
 
   const totalHeight = frontHeight + backHeight + dbHeight;
 
+  useEffect(() => {
+    const updateHeight = (title: string, totalHeight: number) => {
+      switch (title) {
+        case "dev":
+          setColHeight((prev) => ({
+            ...prev,
+            devHeight: TOTAL_BAR_HEIGHT - totalHeight + 40,
+          }));
+          break;
+        case "test":
+          setColHeight((prev) => ({
+            ...prev,
+            testHeight: TOTAL_BAR_HEIGHT - totalHeight + 40,
+          }));
+          break;
+        case "prod":
+          setColHeight((prev) => ({
+            ...prev,
+            prodHeight: TOTAL_BAR_HEIGHT - totalHeight + 40,
+          }));
+          break;
+        default:
+          break;
+      }
+    };
+    updateHeight(title, totalHeight);
+  }, [title, totalHeight, setColHeight]);
+
   return (
-    <g transform={`translate(${barWidth}, ${TOTAL_BAR_HEIGHT - totalHeight})`}>
+    <g
+      transform={`translate(${barWidth}, ${
+        TOTAL_BAR_HEIGHT - totalHeight + 40
+      })`}
+    >
       <g>
         <svg
           width={TOTAL_BAR_WIDTH}
@@ -26,7 +61,7 @@ export const Column: React.FC<IColumn> = ({
             d={`M10 0C4.47715 0 0 4.47715 0 10V${frontHeight}H${TOTAL_BAR_WIDTH}V10C${TOTAL_BAR_WIDTH} 4.47715 ${
               TOTAL_BAR_WIDTH - 4.47715
             } 0 ${TOTAL_BAR_WIDTH - 10} 0H10Z`}
-            fill="#4AB6E8"
+            fill={COLORS.FRONT}
           />
         </svg>
         <text
@@ -37,14 +72,14 @@ export const Column: React.FC<IColumn> = ({
           alignmentBaseline="middle"
           fontSize="16"
         >
-          {front}
+          {prettyNumber(front)}
         </text>
       </g>
       <rect
         y={frontHeight}
         width={TOTAL_BAR_WIDTH}
         height={backHeight}
-        fill="#AA6FAC"
+        fill={COLORS.BACK}
       />
       <text
         x={TOTAL_BAR_WIDTH / 2}
@@ -54,7 +89,7 @@ export const Column: React.FC<IColumn> = ({
         alignmentBaseline="middle"
         fontSize="16"
       >
-        {back}
+        {prettyNumber(back)}
       </text>
       <g transform={`translate(0, ${frontHeight + backHeight})`}>
         <path
@@ -65,7 +100,7 @@ export const Column: React.FC<IColumn> = ({
           } ${dbHeight}H10C5 ${dbHeight} 0 ${dbHeight - 5} 0 ${
             dbHeight - 10
           }V0Z`}
-          fill="#E85498"
+          fill={COLORS.DB}
         />
         <text
           x={TOTAL_BAR_WIDTH / 2}
@@ -75,7 +110,7 @@ export const Column: React.FC<IColumn> = ({
           alignmentBaseline="middle"
           fontSize="16"
         >
-          {db}
+          {prettyNumber(db)}
         </text>
       </g>
       <text
